@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Meet Attendance — NoBrokerHood</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0d0f12;
+      --surface: #161a20;
+      --border: #232830;
+      --accent: #3b82f6;
+      --accent-dim: rgba(59,130,246,0.12);
+      --green: #22c55e;
+      --red: #ef4444;
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --card: #1a1f28;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    header {
+      padding: 18px 32px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface);
+    }
+    .logo {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 15px; font-weight: 600; letter-spacing: -0.3px;
+    }
+    .logo-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+    .logo span { color: var(--muted); font-weight: 400; margin-left: 4px; }
+    .user-badge {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13px; color: var(--muted);
+    }
+    .user-badge strong { color: var(--text); }
+    .btn-sm {
+      padding: 5px 12px; border-radius: 6px; font-size: 12px;
+      cursor: pointer; border: 1px solid var(--border); background: transparent;
+      color: var(--muted); font-family: inherit; transition: all .2s;
+    }
+    .btn-sm:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── MAIN ── */
+    main { flex: 1; padding: 40px 32px; max-width: 900px; margin: 0 auto; width: 100%; }
+
+    /* ── LOGIN CARD ── */
+    .login-wrap {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; min-height: 60vh; gap: 32px;
+    }
+    .login-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 40px 48px; width: 100%; max-width: 420px;
+      display: flex; flex-direction: column; gap: 20px;
+    }
+    .login-title { font-size: 22px; font-weight: 600; letter-spacing: -0.5px; }
+    .login-sub { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .input-wrap { display: flex; flex-direction: column; gap: 8px; }
+    .input-wrap label { font-size: 12px; color: var(--muted); font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; }
+    input[type="text"] {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 8px; padding: 11px 14px; color: var(--text);
+      font-family: 'DM Mono', monospace; font-size: 14px; width: 100%;
+      outline: none; transition: border-color .2s;
+    }
+    input[type="text"]:focus { border-color: var(--accent); }
+    .btn-google {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      background: var(--accent); color: #fff; border: none;
+      border-radius: 8px; padding: 12px; font-size: 14px; font-weight: 500;
+      cursor: pointer; font-family: inherit; transition: opacity .2s; width: 100%;
+    }
+    .btn-google:hover { opacity: 0.88; }
+    .btn-google svg { width: 18px; height: 18px; }
+    .error-msg {
+      background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3);
+      color: #fca5a5; border-radius: 8px; padding: 10px 14px; font-size: 13px;
+    }
+
+    /* ── SECTION HEADERS ── */
+    .section-head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .section-title { font-size: 16px; font-weight: 600; letter-spacing: -0.3px; }
+    .section-meta { font-size: 12px; color: var(--muted); }
+
+    /* ── MEETINGS TABLE ── */
+    .table-wrap {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden; margin-bottom: 24px;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    thead { background: var(--card); }
+    thead th {
+      padding: 12px 16px; text-align: left; font-size: 11px;
+      font-weight: 500; color: var(--muted); text-transform: uppercase;
+      letter-spacing: 0.5px; border-bottom: 1px solid var(--border);
+    }
+    thead th:first-child { width: 40px; }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background .15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(59,130,246,0.04); }
+    tbody td { padding: 13px 16px; font-size: 13px; }
+    .code-badge {
+      font-family: 'DM Mono', monospace; font-size: 12px;
+      background: var(--accent-dim); color: var(--accent);
+      padding: 3px 8px; border-radius: 5px;
+    }
+    .status-done { color: var(--muted); font-size: 12px; }
+    .status-live {
+      color: var(--green); font-size: 12px;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .live-dot {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    input[type="checkbox"] { accent-color: var(--accent); width: 15px; height: 15px; cursor: pointer; }
+
+    /* ── ACTIONS BAR ── */
+    .actions-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 20px;
+    }
+    .selected-count { font-size: 13px; color: var(--muted); }
+    .selected-count strong { color: var(--text); }
+    .btn-export {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--green); color: #fff; border: none;
+      border-radius: 8px; padding: 10px 20px; font-size: 13px;
+      font-weight: 600; cursor: pointer; font-family: inherit; transition: opacity .2s;
+    }
+    .btn-export:hover { opacity: 0.88; }
+    .btn-export:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ── LOADER ── */
+    .loader {
+      display: none; text-align: center; padding: 60px 20px;
+      color: var(--muted); font-size: 14px; flex-direction: column;
+      align-items: center; gap: 16px;
+    }
+    .spinner {
+      width: 28px; height: 28px; border: 2px solid var(--border);
+      border-top-color: var(--accent); border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed; bottom: 24px; right: 24px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 20px; font-size: 13px;
+      display: none; align-items: center; gap: 10px; z-index: 999;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+    .toast.show { display: flex; animation: slideIn .3s ease; }
+    @keyframes slideIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+    .toast.success { border-color: rgba(34,197,94,0.3); }
+    .toast.error { border-color: rgba(239,68,68,0.3); }
+
+    footer {
+      text-align: center; padding: 20px; font-size: 12px;
+      color: var(--muted); border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-dot"></div>
+    Meet Attendance <span>NoBrokerHood</span>
+  </div>
+  {% if is_authenticated %}
+  <div class="user-badge">
+    Logged in as <strong>{{ user }}</strong>
+    <a href="/auth/logout?user={{ user }}"><button class="btn-sm">Logout</button></a>
+  </div>
+  {% endif %}
+</header>
+
+<main>
+
+  {% if not is_authenticated %}
+  <!-- ── LOGIN ── -->
+  <div class="login-wrap">
+    <div class="login-card">
+      <div>
+        <div class="login-title">📋 Attendance Tracker</div>
+        <div class="login-sub" style="margin-top:8px">
+          Login with your NoBrokerHood Google account to fetch attendance from your Google Meet sessions.
+        </div>
+      </div>
+
+      {% if error %}
+      <div class="error-msg">⚠️ {{ error }}</div>
+      {% endif %}
+
+      <div class="input-wrap">
+        <label>Your Name / ID</label>
+        <input type="text" id="userName" placeholder="e.g. virendra, priya, ravi"
+               value="{{ user }}" autocomplete="off"/>
+      </div>
+
+      <button class="btn-google" onclick="doLogin()">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        </svg>
+        Continue with Google
+      </button>
+    </div>
+    <div style="font-size:12px; color: var(--muted); text-align:center; max-width:380px; line-height:1.8">
+      Each team member logs in with their own account.<br>
+      You can only see meetings <strong style="color:var(--text)">you organized</strong>.
+    </div>
+  </div>
+
+  {% else %}
+  <!-- ── MEETINGS ── -->
+  <div class="section-head">
+    <div class="section-title">Your Recent Meetings</div>
+    <div class="section-meta" id="meetCount">Loading...</div>
+  </div>
+
+  <div class="loader" id="loader" style="display:flex">
+    <div class="spinner"></div>
+    Fetching your meetings from Google Meet...
+  </div>
+
+  <div id="meetingsArea" style="display:none">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th><input type="checkbox" id="selectAll" title="Select all"/></th>
+            <th>Meeting Code</th>
+            <th>Started</th>
+            <th>Ended</th>
+          </tr>
+        </thead>
+        <tbody id="meetBody"></tbody>
+      </table>
+    </div>
+
+    <div class="actions-bar">
+      <div class="selected-count">
+        <strong id="selCount">0</strong> meetings selected
+      </div>
+      <button class="btn-export" id="exportBtn" onclick="exportAttendance()" disabled>
+        ⬇ Export Excel
+      </button>
+    </div>
+  </div>
+  {% endif %}
+
+</main>
+
+<footer>NoBrokerHood Internal Tool · Google Meet Attendance Tracker</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const USER = "{{ user }}";
+  let meetings = [];
+
+  function doLogin() {
+    const name = document.getElementById("userName").value.trim();
+    if (!name) { showToast("Please enter your name first", "error"); return; }
+    window.location.href = `/auth/login?user=${encodeURIComponent(name)}`;
+  }
+
+  document.getElementById("userName")?.addEventListener("keydown", e => {
+    if (e.key === "Enter") doLogin();
+  });
+
+  function showToast(msg, type="success") {
+    const t = document.getElementById("toast");
+    t.textContent = (type === "success" ? "✅ " : "❌ ") + msg;
+    t.className = `toast ${type} show`;
+    setTimeout(() => t.className = "toast", 3500);
+  }
+
+  function updateSelCount() {
+    const checked = document.querySelectorAll(".row-check:checked").length;
+    document.getElementById("selCount").textContent = checked;
+    document.getElementById("exportBtn").disabled = checked === 0;
+  }
+
+  // Select all
+  document.getElementById("selectAll")?.addEventListener("change", function() {
+    document.querySelectorAll(".row-check").forEach(cb => cb.checked = this.checked);
+    updateSelCount();
+  });
+
+  function renderMeetings(data) {
+    meetings = data;
+    const tbody = document.getElementById("meetBody");
+    tbody.innerHTML = "";
+
+    if (!data.length) {
+      tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:32px;color:var(--muted)">
+        No meetings found. Make sure you organized meetings recently.</td></tr>`;
+      return;
+    }
+
+    data.forEach((m, i) => {
+      const isLive = m.endDisplay === "Ongoing";
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><input type="checkbox" class="row-check" data-name="${m.name}" onchange="updateSelCount()"/></td>
+        <td><span class="code-badge">${m.meetingCode}</span></td>
+        <td style="font-size:13px;color:var(--muted)">${m.startDisplay}</td>
+        <td>${isLive
+          ? `<span class="status-live"><span class="live-dot"></span>Live</span>`
+          : `<span class="status-done">${m.endDisplay}</span>`
+        }</td>`;
+      tbody.appendChild(tr);
+    });
+
+    document.getElementById("meetCount").textContent = `${data.length} meetings found`;
+    document.getElementById("loader").style.display = "none";
+    document.getElementById("meetingsArea").style.display = "block";
+  }
+
+  async function exportAttendance() {
+    const selected = [...document.querySelectorAll(".row-check:checked")]
+      .map(cb => cb.dataset.name);
+    if (!selected.length) return;
+
+    const btn = document.getElementById("exportBtn");
+    btn.disabled = true;
+    btn.textContent = "⏳ Exporting...";
+
+    try {
+      const resp = await fetch("/api/export", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user: USER, records: selected })
+      });
+
+      if (!resp.ok) {
+        const err = await resp.json();
+        throw new Error(err.detail || "Export failed");
+      }
+
+      const blob = await resp.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `attendance_${new Date().toISOString().slice(0,10)}.xlsx`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast(`Exported ${selected.length} meeting(s) successfully!`);
+    } catch(e) {
+      showToast(e.message, "error");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "⬇ Export Excel";
+      updateSelCount();
+    }
+  }
+
+  // Load meetings if authenticated
+  if (USER) {
+    fetch(`/api/meetings?user=${encodeURIComponent(USER)}`)
+      .then(r => {
+        if (r.status === 401) throw new Error("Session expired. Please login again.");
+        return r.json();
+      })
+      .then(renderMeetings)
+      .catch(e => {
+        document.getElementById("loader").innerHTML =
+          `<div style="color:var(--red)">❌ ${e.message}</div>`;
+      });
+  }
+</script>
+</body>
+</html>
