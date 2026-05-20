@@ -91,6 +91,10 @@ def get_meeting_code(service, space_val: str) -> tuple[str, str]:
         return space_name.split("/")[-1], ""
 
 
+def build_meet_service(creds: Credentials):
+    return build("meet", "v2", credentials=creds, static_discovery=False)
+
+
 # ──────────────────────────────────────────
 # PAGES
 # ──────────────────────────────────────────
@@ -153,7 +157,7 @@ def api_meetings(user: str):
     if not creds:
         raise HTTPException(status_code=401, detail="Not authenticated")
 
-    service = build("meet", "v2", credentials=creds)
+    service = build_meet_service(creds)
     records, page_token = [], None
 
     while len(records) < 30:
@@ -196,7 +200,7 @@ async def api_export(request: Request):
     if not record_names:
         raise HTTPException(status_code=400, detail="No meetings selected")
 
-    service = build("meet", "v2", credentials=creds)
+    service = build_meet_service(creds)
     all_rows = []
 
     for record_name in record_names:
