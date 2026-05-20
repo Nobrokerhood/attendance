@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: meet-attendance-nbh
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: APP_URL
+        value: https://meet-attendance-nbh.onrender.com   # ← update after first deploy
+      - key: GOOGLE_CREDENTIALS_B64
+        sync: false   # ← paste the base64 value manually in Render dashboard
