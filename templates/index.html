@@ -387,6 +387,17 @@
     fetch(`/api/meetings?user=${encodeURIComponent(USER)}`)
       .then(r => {
         if (r.status === 401) throw new Error("Session expired. Please login again.");
+        if (!r.ok) {
+          return r.text().then(text => {
+            let message = "Could not fetch meetings.";
+            try {
+              message = JSON.parse(text).detail || message;
+            } catch (_) {
+              message = text || message;
+            }
+            throw new Error(message);
+          });
+        }
         return r.json();
       })
       .then(renderMeetings)
