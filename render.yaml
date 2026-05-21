@@ -6,6 +6,6 @@ services:
     startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: APP_URL
-        value: https://meet-attendance-nbh.onrender.com   # ← update after first deploy
+        value: https://attendance-xgh0.onrender.com
       - key: GOOGLE_CREDENTIALS_B64
-        sync: false   # ← paste the base64 value manually in Render dashboard
+        sync: false   
