@@ -6,6 +6,6 @@ services:
     startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: APP_URL
-        value: https://attendance-xgh0.onrender.com
+        value: https://meet-attendance-nbh.onrender.com
       - key: GOOGLE_CREDENTIALS_B64
         sync: false   
