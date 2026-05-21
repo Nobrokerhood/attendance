@@ -1,8 +1,12 @@
-credentials.json
-tokens/
 __pycache__/
 *.pyc
-.env
-*.xlsx
-*.csv
 .venv/
+env/
+venv/
+
+tokens/
+
+credentials.json
+
+.idea/
+.vscode/
