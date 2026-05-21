@@ -1,9 +1,8 @@
 # Google Meet Attendance Tracker
 
 <img width="1354" height="142" alt="image" src="https://github.com/user-attachments/assets/06648aa7-f57e-4088-a378-3b04240e2211" />
-
 <img width="1354" height="230" alt="image" src="https://github.com/user-attachments/assets/380022dc-2eff-4428-be1c-c89c59f030ca" />
-
+<img width="1233" height="52" alt="image" src="https://github.com/user-attachments/assets/805fba2b-c499-4a0e-94ba-3c5e247d133d" />
 
 A modern Google Meet Attendance Tracker built using FastAPI and Google Meet API.
 
